@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "846329884702",
+    "project_id": "ngo2-54182",
+    "storage_bucket": "ngo2-54182.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846329884702:android:9f225edf11172b27fefe0f",
+        "android_client_info": {
+          "package_name": "com.example.ngo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846329884702-m84h10ft49mmdmjhc86a27df4rhniupd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ngo",
+            "certificate_hash": "105528871bf2e7c2b406a3c7f05e1f565f176222"
+          }
+        },
+        {
+          "client_id": "846329884702-pshja0htbrcrdakjba4p6mi1ecstvv6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEXPU6DL4gQEnuA5tM5dskvNvmz12ehHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846329884702-pshja0htbrcrdakjba4p6mi1ecstvv6r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
