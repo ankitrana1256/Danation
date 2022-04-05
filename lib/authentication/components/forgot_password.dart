@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ngo/authentication/functions/firebase.dart';
-
 import '../../apptheme.dart';
 
 enum state { pending, done }
