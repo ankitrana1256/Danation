@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,7 @@ class _HomePage2State extends State<HomePage2>
     getNgoDoc();
     getNGO();
     getAreas();
+    getrequests();
     super.initState();
   }
 
@@ -136,7 +138,7 @@ class _HomePage2State extends State<HomePage2>
             Circle(
               circleId: CircleId(data['id']),
               center: LatLng(data['latitude'], data['longitude']),
-              radius: 500,
+              radius: 100,
               fillColor: Colors.purple.withOpacity(0.6),
               strokeColor: Colors.transparent,
             ),
@@ -319,6 +321,50 @@ class _HomePage2State extends State<HomePage2>
   // Set Style
   void setMapStyle(String mapStyle) {
     _googleMapController!.setMapStyle(mapStyle);
+  }
+
+  Future<void> getrequests() async {
+    FirebaseFirestore.instance
+        .collection('donations')
+        .get()
+        .then((value) async {
+      for (int i = 0; i < value.docs.length; ++i) {
+        Map<String, dynamic> data = value.docs[i].data();
+        String ngoDocumentId = value.docs[i].id;
+        final getcoordinates = data["pickupCoordinates"].split(',');
+        var a = Marker(
+          markerId: MarkerId(ngoDocumentId),
+          position: LatLng(
+            double.parse(getcoordinates[0]),
+            double.parse(getcoordinates[1]),
+          ),
+          icon: await _getAssetIcon(
+                  context, 'assets/homepage/marker/marker-1.png')
+              .then((value) => value),
+        );
+        _markers.add(a);
+      }
+    });
+  }
+
+  Future<BitmapDescriptor> _getAssetIcon(
+      BuildContext context, String icon) async {
+    final Completer<BitmapDescriptor> bitmapIcon =
+        Completer<BitmapDescriptor>();
+    final ImageConfiguration config =
+        createLocalImageConfiguration(context, size: const Size(5, 5));
+
+    AssetImage(icon)
+        .resolve(config)
+        .addListener(ImageStreamListener((ImageInfo image, bool sync) async {
+      final ByteData? bytes =
+          await image.image.toByteData(format: ImageByteFormat.png);
+      final BitmapDescriptor bitmap =
+          BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
+      bitmapIcon.complete(bitmap);
+    }));
+
+    return await bitmapIcon.future;
   }
 
   void getNGO() async {

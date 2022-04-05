@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ngo/apptheme.dart';
 import 'package:provider/provider.dart';
 
@@ -27,24 +28,11 @@ class _NewRequestsState extends State<NewRequests> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('donations')
-            // TODO: To add this where clause
-            // .where('accepted',isNotEqualTo: true)
             .where('createdOn', isGreaterThan: widget.timeOfInitialRequest)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.docs.isNotEmpty) {
-              // return AnimatedPositioned(
-              //   // height: 90,
-              //   child: Align(
-              //     alignment: Alignment.topCenter,
-              //     child: TweenAnimationBuilder(
-              //         tween: Tween<double>(begin: 0, end: 1),
-              //         duration: Duration(milliseconds: 200),
-              //         builder: (context, double value, Widget? child) {
-              //           double offset = sin(value);
-              //           return Transform.translate(
-              //             offset: Offset(0,offset),
               return Align(
                 alignment: Alignment.topCenter,
                 child: GestureDetector(
@@ -117,10 +105,11 @@ class _NgoDonationsRequestsState extends State<NgoDonationsRequests> {
   late ScrollController controller;
   bool scrollVisibility = false;
   late DonationRequestsCardProvider provider;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     controller = ScrollController()..addListener(_scrollListener);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       provider =

@@ -16,7 +16,10 @@ import '../../providers/submit_page_provider.dart';
 import 'donation_submit_loading_screen.dart';
 
 class UserInfo extends StatefulWidget {
-  const UserInfo({Key? key}) : super(key: key);
+  // final List<File> images;
+  // final List<Map<String,dynamic>> items;
+
+  UserInfo({Key? key}) : super(key: key);
 
   @override
   _UserInfoState createState() => _UserInfoState();
@@ -26,6 +29,9 @@ class _UserInfoState extends State<UserInfo> {
   String username = 'user';
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;
   bool hasValue = false;
+  // late StreamSubscription _streamSubscription;
+  // late final manager;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -69,19 +75,14 @@ class _UserInfoState extends State<UserInfo> {
             );
             hasValue = true;
           }
-          _markers.add(
-            Marker(
+          _markers.add(Marker(
               onTap: () {
                 _locationController.text = '${loc.latitude},${loc.longitude}';
               },
               infoWindow: const InfoWindow(title: 'Address set'),
               markerId: const MarkerId('Home'),
-              position: LatLng(
-                loc.latitude ?? 0.0,
-                loc.longitude ?? 0.0,
-              ),
-            ),
-          );
+              position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
+          // ('${loc.latitude} ${loc.longitude}');
         });
       },
     );
@@ -121,11 +122,14 @@ class _UserInfoState extends State<UserInfo> {
     super.initState();
     fetchUserData().whenComplete(() => setState(() => {}));
     getLocation();
+    print('getting in init');
+    // getLocation();
   }
 
   @override
   void dispose() {
     _googleMapController?.dispose();
+    // _streamSubscription.cancel();
     super.dispose();
   }
 
@@ -229,6 +233,8 @@ class _UserInfoState extends State<UserInfo> {
             ),
             const SizedBox(height: 10),
             Row(
+              // crossAxisAlignment: CrossAxisAlignment.baseline,
+              // textBaseline: TextBaseline.alphabetic,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
@@ -352,7 +358,7 @@ class _UserInfoState extends State<UserInfo> {
                     pickupDateTime: DateTime(date.year, date.month, date.day,
                         time!.hour, time!.minute),
                     donorEmail: _emailController.text,
-                    pickupCoordinates: (29.6923).toString(),
+                    pickupCoordinates: _locationController.text,
                     donorID: currentUserUid,
                     donorPhone: _phoneNumber,
                     createdON: DateTime.now(),
