@@ -15,7 +15,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   static List<Widget> screens = [
     const FoodDonation(),
-    Container(),
+    const ComingSoon(),
     const ComingSoon(),
     const ComingSoon(),
   ];

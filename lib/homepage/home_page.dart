@@ -778,23 +778,6 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: FloatingActionButton(
-              heroTag: "btn1",
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.exit_to_app),
-              onPressed: () {
-                logout().then((value) async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.remove('Ngo');
-                  prefs.remove('userType');
-                  Navigator.pushReplacementNamed(context, '/wrapper');
-                });
-              },
-            ),
-          ),
         ],
       ),
     );
