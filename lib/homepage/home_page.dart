@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +14,7 @@ import 'package:location/location.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:ngo/apptheme.dart';
-import 'package:ngo/authentication/functions/firebase.dart';
 import 'package:ngo/homepage/components/ngo_profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'components/get_location.dart';
 import 'components/ngo_bottomsheet.dart';
 import 'components/updatecamera.dart';
@@ -55,13 +56,11 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
+    setmarker();
     getLocation();
     getNGO();
     getAreas();
     super.initState();
-
-    // createHotAreas(
-    //     'H2', "Sample", "description", "address", 28.417749, 77.289040);
   }
 
   @override
@@ -69,6 +68,10 @@ class _HomePageState extends State<HomePage>
     _googleMapController?.dispose();
     _streamSubscription.cancel();
     super.dispose();
+  }
+
+  Future<void> setmarker() async {
+    mypos = await getMapIcon('assets/homepage/marker/NGO.png');
   }
 
   Future<void> createHotAreas(
@@ -295,11 +298,6 @@ class _HomePageState extends State<HomePage>
     return await rootBundle.loadString(path);
   }
 
-  // Set Style
-  void setMapStyle(String mapStyle) {
-    _googleMapController!.setMapStyle(mapStyle);
-  }
-
   void getNGO() async {
     FirebaseFirestore.instance.collection('NGO').get().then((value) {
       for (int i = 0; i < value.docs.length; ++i) {
@@ -482,6 +480,22 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  Future<BitmapDescriptor> getMapIcon(String iconPath) async {
+    final Uint8List endMarker = await getBytesFromAsset(iconPath, 120);
+    final icon = BitmapDescriptor.fromBytes(endMarker);
+    return icon;
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    var codec = await instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   addNgoMarker(id, lat, long, name, address, marker, workingIn, mobile, email,
       website, ngoDocumentId) {
     return Marker(
@@ -494,7 +508,7 @@ class _HomePageState extends State<HomePage>
         lat,
         long,
       ),
-      icon: BitmapDescriptor.defaultMarkerWithHue(marker),
+      icon: mypos,
     );
   }
 

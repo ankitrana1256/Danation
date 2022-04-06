@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ngo/bottom_navigation_bar.dart';
 import 'package:ngo/flow/wrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../apptheme.dart';
 import '../functions/firebase.dart';
 
@@ -40,7 +41,8 @@ class _VerifyUserState extends State<VerifyUser> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      // Navigator.pushReplacementNamed(context, '/bottombar');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userType', 'Donor');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

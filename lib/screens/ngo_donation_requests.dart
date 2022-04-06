@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ngo/apptheme.dart';
 import 'package:provider/provider.dart';
 
@@ -37,19 +36,18 @@ class _NewRequestsState extends State<NewRequests> {
                 alignment: Alignment.topCenter,
                 child: GestureDetector(
                   onTap: () {
-                    widget.controller
-                        .animateTo(widget.controller.position.minScrollExtent,
-                            duration: const Duration(milliseconds: 150),
-                            curve: Curves.easeInOut)
-                        .then((value) {
-                      widget.callback();
-                    });
+                    // widget.controller
+                    //     .animateTo(widget.controller.position.minScrollExtent,
+                    //         duration: const Duration(milliseconds: 150),
+                    //         curve: Curves.easeInOut)
+                    //     .then((value) {
+                    //   widget.callback();
+                    // });
                   },
                   child: Material(
                     elevation: 10.0,
                     borderRadius: BorderRadius.circular(6),
                     child: Container(
-                      // clipBehavior: Clip,
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
@@ -119,7 +117,6 @@ class _NgoDonationsRequestsState extends State<NgoDonationsRequests> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     controller.removeListener(_scrollListener);
     controller.dispose();
     super.dispose();

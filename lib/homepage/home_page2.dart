@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,11 +58,15 @@ class _HomePage2State extends State<HomePage2>
 
   @override
   void initState() {
+    super.initState();
     getNgoDoc();
     getNGO();
     getAreas();
     getrequests();
-    super.initState();
+  }
+
+  Future<void> setmarker() async {
+    mypos = await getMapIcon('assets/homepage/marker/NGO.png');
   }
 
   @override
@@ -85,7 +90,7 @@ class _HomePage2State extends State<HomePage2>
       Circle(
         circleId: CircleId(id),
         center: LatLng(latitude, longitude),
-        radius: 500,
+        radius: 100,
         fillColor: Colors.purple.withOpacity(0.6),
         strokeColor: Colors.transparent,
       ),
@@ -311,6 +316,22 @@ class _HomePage2State extends State<HomePage2>
         );
       },
     );
+  }
+
+  Future<BitmapDescriptor> getMapIcon(String iconPath) async {
+    final Uint8List endMarker = await getBytesFromAsset(iconPath, 120);
+    final icon = BitmapDescriptor.fromBytes(endMarker);
+    return icon;
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    var codec = await instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
   // getJSON
@@ -561,7 +582,7 @@ class _HomePage2State extends State<HomePage2>
         lat,
         long,
       ),
-      icon: BitmapDescriptor.defaultMarkerWithHue(marker),
+      icon: mypos,
     );
   }
 
@@ -618,17 +639,18 @@ class _HomePage2State extends State<HomePage2>
   }
 
   void _addDestination(LatLng pos) {
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: const MarkerId("Here"),
-          infoWindow: const InfoWindow(title: "Create at this location"),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-          position: pos,
-        ),
-      );
-      showModalBottomSheet(
+    setState(
+      () {
+        _markers.add(
+          Marker(
+            markerId: const MarkerId("Here"),
+            infoWindow: const InfoWindow(title: "Create at this location"),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueViolet),
+            position: pos,
+          ),
+        );
+        showModalBottomSheet(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
@@ -726,7 +748,15 @@ class _HomePage2State extends State<HomePage2>
                 ),
               ],
             );
-          });
+          },
+        );
+      },
+    );
+  }
+
+  void showPinOnMap() {
+    setState(() {
+      getNGO();
     });
   }
 
@@ -752,6 +782,7 @@ class _HomePage2State extends State<HomePage2>
             mapToolbarEnabled: false,
             onMapCreated: (controller) {
               _googleMapController = controller;
+              showPinOnMap();
             },
             onLongPress: _addDestination,
             markers: _markers,
