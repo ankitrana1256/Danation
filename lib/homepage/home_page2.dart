@@ -48,7 +48,9 @@ class _HomePage2State extends State<HomePage2>
   final TextEditingController _id = TextEditingController();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _address = TextEditingController();
-  late BitmapDescriptor mypos;
+  late BitmapDescriptor ngoIcon;
+  late BitmapDescriptor myPos;
+  late BitmapDescriptor area;
   List<SearchFieldListItem<String>> suggestions = [];
   late StreamSubscription _streamSubscription;
   var _initialCameraPosition = const CameraPosition(
@@ -59,6 +61,7 @@ class _HomePage2State extends State<HomePage2>
   @override
   void initState() {
     super.initState();
+    setmarker();
     getNgoDoc();
     getNGO();
     getAreas();
@@ -66,7 +69,9 @@ class _HomePage2State extends State<HomePage2>
   }
 
   Future<void> setmarker() async {
-    mypos = await getMapIcon('assets/homepage/marker/NGO.png');
+    ngoIcon = await getMapIcon('assets/homepage/marker/NGO2.png');
+    area = await getMapIcon('assets/homepage/marker/Areas.png');
+    myPos = await getMapIcon('assets/homepage/marker/mypos.png');
   }
 
   @override
@@ -144,7 +149,7 @@ class _HomePage2State extends State<HomePage2>
               circleId: CircleId(data['id']),
               center: LatLng(data['latitude'], data['longitude']),
               radius: 100,
-              fillColor: Colors.purple.withOpacity(0.6),
+              fillColor: Colors.green.withOpacity(0.6),
               strokeColor: Colors.transparent,
             ),
           );
@@ -190,17 +195,16 @@ class _HomePage2State extends State<HomePage2>
 
   addAreasMarker(id, lat, long, name, address, marker, likes, dislikes) {
     return Marker(
-      onTap: () {
-        showAreaSheet(
-            id, lat, long, name, address, startLat, startLng, likes, dislikes);
-      },
-      markerId: MarkerId('A$id'),
-      position: LatLng(
-        lat,
-        long,
-      ),
-      icon: BitmapDescriptor.defaultMarkerWithHue(marker),
-    );
+        onTap: () {
+          showAreaSheet(id, lat, long, name, address, startLat, startLng, likes,
+              dislikes);
+        },
+        markerId: MarkerId('A$id'),
+        position: LatLng(
+          lat,
+          long,
+        ),
+        icon: area);
   }
 
   void showAreaSheet(id, lat, long, name, address, double startLat,
@@ -582,7 +586,7 @@ class _HomePage2State extends State<HomePage2>
         lat,
         long,
       ),
-      icon: mypos,
+      icon: ngoIcon,
     );
   }
 
@@ -755,9 +759,7 @@ class _HomePage2State extends State<HomePage2>
   }
 
   void showPinOnMap() {
-    setState(() {
-      getNGO();
-    });
+    setState(() {});
   }
 
   @override

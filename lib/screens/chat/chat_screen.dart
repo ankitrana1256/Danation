@@ -24,7 +24,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   CollectionReference chats =
       FirebaseFirestore.instance.collection('usersChats');
-  // final currentUserUid = FirebaseAuth.instance.currentUser!.uid; // TODO: To make a new class to store the current user uid and other details
   var chatDocumentId;
   final _textController = TextEditingController();
   late Reference _storageReference;

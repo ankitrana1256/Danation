@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -46,7 +45,9 @@ class _HomePageState extends State<HomePage>
   bool selected = false;
   Location currentLocation = Location();
   TextEditingController search = TextEditingController();
-  late BitmapDescriptor mypos;
+  late BitmapDescriptor ngoIcon;
+  late BitmapDescriptor myPos;
+  late BitmapDescriptor area;
   List<SearchFieldListItem<String>> suggestions = [];
   late StreamSubscription _streamSubscription;
   var _initialCameraPosition = const CameraPosition(
@@ -58,9 +59,9 @@ class _HomePageState extends State<HomePage>
   void initState() {
     setmarker();
     getLocation();
+    super.initState();
     getNGO();
     getAreas();
-    super.initState();
   }
 
   @override
@@ -71,7 +72,9 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> setmarker() async {
-    mypos = await getMapIcon('assets/homepage/marker/NGO.png');
+    ngoIcon = await getMapIcon('assets/homepage/marker/NGO2.png');
+    area = await getMapIcon('assets/homepage/marker/Areas.png');
+    myPos = await getMapIcon('assets/homepage/marker/mypos.png');
   }
 
   Future<void> createHotAreas(
@@ -144,7 +147,7 @@ class _HomePageState extends State<HomePage>
               circleId: CircleId(data['id']),
               center: LatLng(data['latitude'], data['longitude']),
               radius: 500,
-              fillColor: Colors.purple.withOpacity(0.6),
+              fillColor: Colors.green.withOpacity(0.6),
               strokeColor: Colors.transparent,
             ),
           );
@@ -174,7 +177,7 @@ class _HomePageState extends State<HomePage>
         lat,
         long,
       ),
-      icon: BitmapDescriptor.defaultMarkerWithHue(marker),
+      icon: area,
     );
   }
 
@@ -508,7 +511,7 @@ class _HomePageState extends State<HomePage>
         lat,
         long,
       ),
-      icon: mypos,
+      icon: ngoIcon,
     );
   }
 

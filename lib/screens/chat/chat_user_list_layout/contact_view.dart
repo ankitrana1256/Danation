@@ -9,7 +9,6 @@ import 'last_send_message.dart';
 class ContactView extends StatelessWidget {
   final Map<String, dynamic> contact;
   final String currentUserUid;
-  // final String contactId;
   ContactView(this.contact, this.currentUserUid);
 
   @override
@@ -41,7 +40,7 @@ class ContactView extends StatelessWidget {
               currentUserUid: currentUserUid,
               contact: contact);
         }
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
         // return const Center(
         //   child: Text("Looks like there is not data present for this NGO."),
         // );
