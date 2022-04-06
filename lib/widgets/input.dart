@@ -8,9 +8,13 @@ class InputField extends StatelessWidget {
   final Widget? suffix;
   final TextAlignVertical? textAlignVertical;
   final List<TextInputFormatter>? inputFormatters;
+  final bool readOnlyField;
 
   InputField(this.fieldController, this.textType,
-      {this.suffix, this.textAlignVertical, this.inputFormatters});
+      {this.suffix,
+      this.textAlignVertical,
+      this.inputFormatters,
+      this.readOnlyField = false});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,7 @@ class InputField extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
           suffixIcon: suffix,
         ),
+        readOnly: readOnlyField,
         keyboardType: textType,
         style: const TextStyle(fontSize: 14),
         validator: (text) {

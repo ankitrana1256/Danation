@@ -288,7 +288,11 @@ class _UserInfoState extends State<UserInfo> {
             const SizedBox(height: 14),
             const FieldTitle(title: 'Address of Pickup'),
             const SizedBox(height: 8),
-            InputField(_locationController, TextInputType.streetAddress),
+            InputField(
+              _locationController,
+              TextInputType.streetAddress,
+              readOnlyField: true,
+            ),
             const SizedBox(height: 14),
             Container(
               color: Colors.black.withOpacity(0.3),
